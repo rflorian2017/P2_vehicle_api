@@ -5,6 +5,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import com.udacity.vehicles.domain.car.Car;
+import com.udacity.vehicles.service.CarNotFoundException;
 import com.udacity.vehicles.service.CarService;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -113,7 +114,15 @@ class CarController {
         /**
          * COMPLETED: Use the Car Service to delete the requested vehicle.
          */
-    	carService.delete(id);
-        return ResponseEntity.noContent().build();
+    	try {
+    		carService.findById(id);
+    		carService.delete(id);
+            return ResponseEntity.noContent().build();
+    	}
+    	catch (CarNotFoundException e) {
+			// TODO: handle exception
+    		return ResponseEntity.notFound().build();
+		}
+    	
     }
 }
